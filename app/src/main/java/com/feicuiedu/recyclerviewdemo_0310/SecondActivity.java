@@ -7,12 +7,15 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 // RecyclerView的使用
 public class SecondActivity extends AppCompatActivity {
@@ -55,6 +58,29 @@ public class SecondActivity extends AppCompatActivity {
         // 4. 设置适配器
         mLinearAdapter = new LinearAdapter();
         mRecyclerView.setAdapter(mLinearAdapter);
+
+        //设置item的点击事件
+        mLinearAdapter.setOnItemClickListener(new LinearAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                Toast.makeText(SecondActivity.this, "click"+position, Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // 长按事件
+        mLinearAdapter.setOnItemLongClickListener(new LinearAdapter.OnItemLongClickListener() {
+            @Override
+            public void onItemLongClick(int position) {
+                Toast.makeText(SecondActivity.this, "onlongClick"+position, Toast.LENGTH_SHORT).show();
+                // 删除数据
+                mLinearAdapter.removeData(position);
+            }
+        });
+    }
+
+    @OnClick(R.id.btnAdd)
+    public void addData(){
+        mLinearAdapter.addData(1);
     }
 
     // 数据填充
