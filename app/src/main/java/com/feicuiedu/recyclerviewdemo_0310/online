@@ -12,10 +12,14 @@ RecyclerView使用：样式、监听、刷新
 
     提供了一个类：ItemTouchHelper
 
+    Callback创建出来：分别处理了拖动和滑动的事件
+
     // 帮助类
     ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
     // 跟RecyclerView关联起来
     itemTouchHelper.attachToRecyclerView(mRecyclerView);
+
+
 
 2. 实现瀑布流
 

@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -96,6 +97,18 @@ public class LinearAdapter extends RecyclerView.Adapter<LinearAdapter.ViewHolder
     @Override
     public int getItemCount() {
         return mData.size();
+    }
+
+    // 移动item
+    public void itemMoved(int fromPosition, int toPosition) {
+
+//        mData.clear();
+//        mData.addAll(data);
+
+        Collections.swap(mData,fromPosition,toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+        notifyItemRangeChanged(fromPosition,mData.size()-fromPosition);
+
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{

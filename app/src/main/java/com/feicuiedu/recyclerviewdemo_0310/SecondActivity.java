@@ -12,6 +12,7 @@ import android.support.v7.widget.helper.ItemTouchHelper;
 import android.widget.Toast;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -79,48 +80,77 @@ public class SecondActivity extends AppCompatActivity {
         });
 
         // 7. 设置拖动和滑动删除
+//        ItemTouchHelper.Callback callback = new ItemTouchHelper.Callback() {
+//            /**
+//             * 方向：
+//             * dragDirs：拖动：LEFT、RIGHT、START、END、UP、DOWN
+//             * swipeDirs：滑动：LEFT、RIGHT、START、END、UP、DOWN
+//             * 如果设置为0的时候，表示没有相应的功能
+//             */
+//
+//            // 拿到设置的移动的方向设置
+//            @Override
+//            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+//                int dragFlags = 0;
+//                int swipeFlags = 0;
+//                // 设置的方向(拖动、滑动)
+//                if (recyclerView.getLayoutManager() instanceof GridLayoutManager){
+//                    dragFlags = ItemTouchHelper.UP|ItemTouchHelper.DOWN|ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT;
+//                    swipeFlags = 0;
+//                }else {
+//                    dragFlags = ItemTouchHelper.UP|ItemTouchHelper.DOWN;
+//                    swipeFlags = ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT;
+//                }
+//                // 将我们设置的Flags设置给ItemTouchHelper
+//                return makeMovementFlags(dragFlags,swipeFlags);
+//            }
+//            // 拖动的事件处理
+//            @Override
+//            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+//                return false;
+//            }
+//            // 滑动
+//            @Override
+//            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+//            }
+//        };
 
-        ItemTouchHelper.Callback callback = new ItemTouchHelper.Callback() {
+        ItemTouchHelper.Callback callback = new ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP|ItemTouchHelper.DOWN,ItemTouchHelper.RIGHT) {
 
-            /**
-             * 方向：
-             * dragDirs：拖动：LEFT、RIGHT、START、END、UP、DOWN
-             * swipeDirs：滑动：LEFT、RIGHT、START、END、UP、DOWN
-             * 如果设置为0的时候，表示没有相应的功能
-             */
-
-            // 拿到设置的移动的方向设置
-            @Override
-            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
-
-                int dragFlags = 0;
-                int swipeFlags = 0;
-                // 设置的方向(拖动、滑动)
-                if (recyclerView.getLayoutManager() instanceof GridLayoutManager){
-                    dragFlags = ItemTouchHelper.UP|ItemTouchHelper.DOWN|ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT;
-                    swipeFlags = 0;
-                }else {
-                    dragFlags = ItemTouchHelper.UP|ItemTouchHelper.DOWN;
-                    swipeFlags = ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT;
-                }
-
-                // 将我们设置的Flags设置给ItemTouchHelper
-                return makeMovementFlags(dragFlags,swipeFlags);
-            }
-
-            // 拖动的事件处理
+            // 拖动
             @Override
             public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
 
+                int fromPosition = viewHolder.getAdapterPosition();// 得到拖动的ViewHolder的position
+                int toPosition = target.getAdapterPosition();// 得到目标的ViewHolder的position
 
+                // 向下移动
+                if (fromPosition<toPosition){
 
-                return false;
+                    // 分别把中间的item位置进行调换
+                    for (int i=fromPosition;i<toPosition;i++){
+                        // 数据集合：通过一个集合的工具类Collections
+                        Collections.swap(mData,i,i+1);
+                    }
+
+                }else {
+
+                    // 向上
+                    for (int i=fromPosition;i>toPosition;i--){
+                        Collections.swap(mData,i,i-1);
+                    }
+                }
+                mLinearAdapter.itemMoved(fromPosition,toPosition);
+                // 表示执行了拖动
+                return true;
             }
 
             // 滑动
             @Override
             public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
-
+                // 滑动的时候删除
+                int position = viewHolder.getAdapterPosition();
+                mLinearAdapter.removeData(position);
             }
         };
 
