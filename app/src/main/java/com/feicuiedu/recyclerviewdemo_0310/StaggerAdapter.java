@@ -24,6 +24,9 @@ public class StaggerAdapter extends RecyclerView.Adapter<StaggerAdapter.ViewHold
     // 高的随机数据
     private List<Integer> mHeights = new ArrayList<>();
 
+    private LinearAdapter.OnItemClickListener mOnItemClickListener;
+    private LinearAdapter.OnItemLongClickListener mLongClickListener;
+
     // 设置数据
     public void setData(List<String> data,List<Integer> heights){
         mHeights.clear();
@@ -32,6 +35,19 @@ public class StaggerAdapter extends RecyclerView.Adapter<StaggerAdapter.ViewHold
         mData.addAll(data);
         notifyDataSetChanged();
     }
+
+    // 移动item
+    public void itemMoved(int fromPosition, int toPosition,List<String> data) {
+
+        mData.clear();
+        mData.addAll(data);
+
+//        Collections.swap(mData,fromPosition,toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+        notifyItemRangeChanged(fromPosition,mData.size()-fromPosition);
+
+    }
+
 
 
     @Override
@@ -42,7 +58,7 @@ public class StaggerAdapter extends RecyclerView.Adapter<StaggerAdapter.ViewHold
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position) {
+    public void onBindViewHolder(ViewHolder holder, final int position) {
 
         // item的宽高需要随机
         ViewGroup.LayoutParams layoutParams = holder.mTvItem.getLayoutParams();
@@ -50,6 +66,30 @@ public class StaggerAdapter extends RecyclerView.Adapter<StaggerAdapter.ViewHold
         holder.mTvItem.setLayoutParams(layoutParams);
 
         holder.mTvItem.setText(mData.get(position));
+
+        if (mOnItemClickListener!=null) {
+
+            holder.mTvItem.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // 可以直接在这里完成，不方便在这里写的话
+                    // 接口回调的方式
+                    mOnItemClickListener.onItemClick(position);
+                }
+            });
+        }
+        if (mLongClickListener!=null){
+            holder.mTvItem.setOnLongClickListener(new View.OnLongClickListener() {
+                @Override
+                public boolean onLongClick(View v) {
+
+                    mLongClickListener.onItemLongClick(position);
+
+                    // 不会触发点击的
+                    return true;
+                }
+            });
+        }
 
     }
 
@@ -67,5 +107,24 @@ public class StaggerAdapter extends RecyclerView.Adapter<StaggerAdapter.ViewHold
             super(itemView);
             ButterKnife.bind(this,itemView);
         }
+    }
+
+    // 设置监听的方法：实现我们接口的初始化
+    public  void setOnItemClickListener(LinearAdapter.OnItemClickListener onItemClickListener){
+        mOnItemClickListener = onItemClickListener;
+    }
+
+    public void setOnItemLongClickListener(LinearAdapter.OnItemLongClickListener onItemLongClickListener){
+        mLongClickListener = onItemLongClickListener;
+    }
+
+    // 点击监听
+    public interface OnItemClickListener{
+        void onItemClick(int position);
+    }
+
+    // 长按的监听
+    public interface OnItemLongClickListener{
+        void onItemLongClick(int position);
     }
 }
