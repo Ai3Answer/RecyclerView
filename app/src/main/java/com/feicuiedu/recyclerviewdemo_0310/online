@@ -7,6 +7,7 @@ RecyclerView使用：样式、监听、刷新
 任务：实践
 下次
 
+20170313
 今天：
 1. 实现拖动或滑动删除的效果
 
@@ -19,9 +20,23 @@ RecyclerView使用：样式、监听、刷新
     // 跟RecyclerView关联起来
     itemTouchHelper.attachToRecyclerView(mRecyclerView);
 
-
+推荐的第三方控件：可以实现侧滑菜单
+github：SwipeRecyclerView
 
 2. 实现瀑布流
+
+    宽或者高不确定：可以通过随机数来产生，产生的随机的宽或高设置给item
+
+    1 设置布局管理器
+    2. 设置适配器：onBindViewHolder里面要设置数据和item的高
+    3. 数据填充
+
+总结：
+1. 拖动和滑动的处理：ItemTouchHelper
+2. 瀑布流的效果：item随机高
+任务：
+RecyclerView的使用
+明天：布局优化
 
 
 

@@ -1,5 +1,6 @@
 package com.feicuiedu.recyclerviewdemo_0310;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -45,10 +46,10 @@ public class SecondActivity extends AppCompatActivity {
         // 1. 设置布局管理器：让他展示的样式是什么
         // StaggeredGridLayoutManager、LinearLayoutManager、GridLayoutManager
         // ListView
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // GridLayout
-//        mRecyclerView.setLayoutManager(new GridLayoutManager(this,4));
+        mRecyclerView.setLayoutManager(new GridLayoutManager(this,4));
 
         // 2. 如果添加或删除item，可以设置动画,他为我们提供一个可以直接使用的动画：DefaultItemAnimator
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -140,7 +141,7 @@ public class SecondActivity extends AppCompatActivity {
                         Collections.swap(mData,i,i-1);
                     }
                 }
-                mLinearAdapter.itemMoved(fromPosition,toPosition);
+                mLinearAdapter.itemMoved(fromPosition,toPosition,mData);
                 // 表示执行了拖动
                 return true;
             }

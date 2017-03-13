@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this,SecondActivity.class));
                 break;
             case R.id.btnStagger:
+                startActivity(new Intent(MainActivity.this,StaggerActivity.class));
                 break;
         }
     }

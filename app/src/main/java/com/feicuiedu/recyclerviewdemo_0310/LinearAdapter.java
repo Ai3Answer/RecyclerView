@@ -100,12 +100,12 @@ public class LinearAdapter extends RecyclerView.Adapter<LinearAdapter.ViewHolder
     }
 
     // 移动item
-    public void itemMoved(int fromPosition, int toPosition) {
+    public void itemMoved(int fromPosition, int toPosition,List<String> data) {
 
-//        mData.clear();
-//        mData.addAll(data);
+        mData.clear();
+        mData.addAll(data);
 
-        Collections.swap(mData,fromPosition,toPosition);
+//        Collections.swap(mData,fromPosition,toPosition);
         notifyItemMoved(fromPosition, toPosition);
         notifyItemRangeChanged(fromPosition,mData.size()-fromPosition);
 
