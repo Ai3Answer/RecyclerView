@@ -7,3 +7,17 @@ RecyclerView使用：样式、监听、刷新
 任务：实践
 下次
 
+今天：
+1. 实现拖动或滑动删除的效果
+
+    提供了一个类：ItemTouchHelper
+
+    // 帮助类
+    ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+    // 跟RecyclerView关联起来
+    itemTouchHelper.attachToRecyclerView(mRecyclerView);
+
+2. 实现瀑布流
+
+
+

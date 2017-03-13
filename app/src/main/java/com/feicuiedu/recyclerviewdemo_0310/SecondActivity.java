@@ -8,6 +8,7 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -43,10 +44,10 @@ public class SecondActivity extends AppCompatActivity {
         // 1. 设置布局管理器：让他展示的样式是什么
         // StaggeredGridLayoutManager、LinearLayoutManager、GridLayoutManager
         // ListView
-//        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // GridLayout
-        mRecyclerView.setLayoutManager(new GridLayoutManager(this,4));
+//        mRecyclerView.setLayoutManager(new GridLayoutManager(this,4));
 
         // 2. 如果添加或删除item，可以设置动画,他为我们提供一个可以直接使用的动画：DefaultItemAnimator
         mRecyclerView.setItemAnimator(new DefaultItemAnimator());
@@ -59,7 +60,7 @@ public class SecondActivity extends AppCompatActivity {
         mLinearAdapter = new LinearAdapter();
         mRecyclerView.setAdapter(mLinearAdapter);
 
-        //设置item的点击事件
+        //5. 设置item的点击事件
         mLinearAdapter.setOnItemClickListener(new LinearAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(int position) {
@@ -67,15 +68,67 @@ public class SecondActivity extends AppCompatActivity {
             }
         });
 
-        // 长按事件
+        //6. 长按事件
         mLinearAdapter.setOnItemLongClickListener(new LinearAdapter.OnItemLongClickListener() {
             @Override
             public void onItemLongClick(int position) {
                 Toast.makeText(SecondActivity.this, "onlongClick"+position, Toast.LENGTH_SHORT).show();
                 // 删除数据
-                mLinearAdapter.removeData(position);
+//                mLinearAdapter.removeData(position);
             }
         });
+
+        // 7. 设置拖动和滑动删除
+
+        ItemTouchHelper.Callback callback = new ItemTouchHelper.Callback() {
+
+            /**
+             * 方向：
+             * dragDirs：拖动：LEFT、RIGHT、START、END、UP、DOWN
+             * swipeDirs：滑动：LEFT、RIGHT、START、END、UP、DOWN
+             * 如果设置为0的时候，表示没有相应的功能
+             */
+
+            // 拿到设置的移动的方向设置
+            @Override
+            public int getMovementFlags(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder) {
+
+                int dragFlags = 0;
+                int swipeFlags = 0;
+                // 设置的方向(拖动、滑动)
+                if (recyclerView.getLayoutManager() instanceof GridLayoutManager){
+                    dragFlags = ItemTouchHelper.UP|ItemTouchHelper.DOWN|ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT;
+                    swipeFlags = 0;
+                }else {
+                    dragFlags = ItemTouchHelper.UP|ItemTouchHelper.DOWN;
+                    swipeFlags = ItemTouchHelper.LEFT|ItemTouchHelper.RIGHT;
+                }
+
+                // 将我们设置的Flags设置给ItemTouchHelper
+                return makeMovementFlags(dragFlags,swipeFlags);
+            }
+
+            // 拖动的事件处理
+            @Override
+            public boolean onMove(RecyclerView recyclerView, RecyclerView.ViewHolder viewHolder, RecyclerView.ViewHolder target) {
+
+
+
+                return false;
+            }
+
+            // 滑动
+            @Override
+            public void onSwiped(RecyclerView.ViewHolder viewHolder, int direction) {
+
+            }
+        };
+
+        // 帮助类
+        ItemTouchHelper itemTouchHelper = new ItemTouchHelper(callback);
+        // 跟RecyclerView关联起来
+        itemTouchHelper.attachToRecyclerView(mRecyclerView);
+
     }
 
     @OnClick(R.id.btnAdd)
