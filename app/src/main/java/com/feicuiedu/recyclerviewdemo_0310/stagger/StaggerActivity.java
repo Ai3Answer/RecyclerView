@@ -1,4 +1,4 @@
-package com.feicuiedu.recyclerviewdemo_0310;
+package com.feicuiedu.recyclerviewdemo_0310.stagger;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -6,6 +6,9 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.widget.Toast;
+
+import com.feicuiedu.recyclerviewdemo_0310.R;
+import com.feicuiedu.recyclerviewdemo_0310.linear.LinearAdapter;
 
 import java.util.ArrayList;
 import java.util.Collections;

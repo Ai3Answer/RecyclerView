@@ -1,10 +1,12 @@
-package com.feicuiedu.recyclerviewdemo_0310;
+package com.feicuiedu.recyclerviewdemo_0310.linear;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.feicuiedu.recyclerviewdemo_0310.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,58 +15,56 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- * Created by gqq on 2017/3/13.
+ * Created by gqq on 2017/3/10.
  */
 
-public class StaggerAdapter extends RecyclerView.Adapter<StaggerAdapter.ViewHolder>{
+// 适配器
+public class LinearAdapter extends RecyclerView.Adapter<LinearAdapter.ViewHolder>{
 
-    // 数据
     private List<String> mData = new ArrayList<>();
 
-    // 高的随机数据
-    private List<Integer> mHeights = new ArrayList<>();
+    private OnItemClickListener mOnItemClickListener;
+    private OnItemLongClickListener mLongClickListener;
 
-    private LinearAdapter.OnItemClickListener mOnItemClickListener;
-    private LinearAdapter.OnItemLongClickListener mLongClickListener;
-
-    // 设置数据
-    public void setData(List<String> data,List<Integer> heights){
-        mHeights.clear();
-        mHeights.addAll(heights);
+    // 数据的填充
+    public void setData(List<String> data){
         mData.clear();
         mData.addAll(data);
         notifyDataSetChanged();
     }
 
-    // 移动item
-    public void itemMoved(int fromPosition, int toPosition,List<String> data) {
+    // 删除某条数据
+    public void removeData(int position) {
+        mData.remove(position);
+        notifyItemRemoved(position);
+        notifyItemRangeChanged(position,mData.size()-position);
 
-        mData.clear();
-        mData.addAll(data);
+        // 最常用
+//        notifyDataSetChanged();
+//        notifyItemRemoved(position);
+//        notifyItemInserted(position);
+//        notifyItemRangeChanged(position,mData.size()-position);
+    }
 
-//        Collections.swap(mData,fromPosition,toPosition);
-        notifyItemMoved(fromPosition, toPosition);
-        notifyItemRangeChanged(fromPosition,mData.size()-fromPosition);
-
+    // 添加某条数据
+    public void addData(int position) {
+        mData.add(position,"insert ok");
+        notifyItemInserted(position);
+        notifyItemRangeChanged(position,mData.size()-position);
     }
 
 
-
+    // 创建视图的ViewHolder
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler,parent,false);
-        ViewHolder viewHolder = new ViewHolder(view);
-        return viewHolder;
+        View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_recycler,parent,false);
+        ViewHolder holder = new ViewHolder(itemView);
+        return holder;
     }
 
+    // 视图和数据进行绑定
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position) {
-
-        // item的宽高需要随机
-        ViewGroup.LayoutParams layoutParams = holder.mTvItem.getLayoutParams();
-        layoutParams.height = mHeights.get(position);
-        holder.mTvItem.setLayoutParams(layoutParams);
-
         holder.mTvItem.setText(mData.get(position));
 
         if (mOnItemClickListener!=null) {
@@ -93,9 +93,22 @@ public class StaggerAdapter extends RecyclerView.Adapter<StaggerAdapter.ViewHold
 
     }
 
+    // item数量
     @Override
     public int getItemCount() {
         return mData.size();
+    }
+
+    // 移动item
+    public void itemMoved(int fromPosition, int toPosition,List<String> data) {
+
+        mData.clear();
+        mData.addAll(data);
+
+//        Collections.swap(mData,fromPosition,toPosition);
+        notifyItemMoved(fromPosition, toPosition);
+        notifyItemRangeChanged(fromPosition,mData.size()-fromPosition);
+
     }
 
     class ViewHolder extends RecyclerView.ViewHolder{
@@ -103,18 +116,19 @@ public class StaggerAdapter extends RecyclerView.Adapter<StaggerAdapter.ViewHold
         @BindView(R.id.item_text)
         TextView mTvItem;
 
-        public ViewHolder(View itemView) {
-            super(itemView);
-            ButterKnife.bind(this,itemView);
-        }
-    }
+         public ViewHolder(View itemView) {
+             super(itemView);
+             // 使用Butterknife
+             ButterKnife.bind(this,itemView);
+         }
+     }
 
     // 设置监听的方法：实现我们接口的初始化
-    public  void setOnItemClickListener(LinearAdapter.OnItemClickListener onItemClickListener){
+    public  void setOnItemClickListener(OnItemClickListener onItemClickListener){
         mOnItemClickListener = onItemClickListener;
     }
 
-    public void setOnItemLongClickListener(LinearAdapter.OnItemLongClickListener onItemLongClickListener){
+    public void setOnItemLongClickListener(OnItemLongClickListener onItemLongClickListener){
         mLongClickListener = onItemLongClickListener;
     }
 

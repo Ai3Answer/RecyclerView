@@ -15,9 +15,11 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".SecondActivity">
+        <activity android:name=".linear.SecondActivity">
         </activity>
-        <activity android:name=".StaggerActivity">
+        <activity android:name=".stagger.StaggerActivity">
+        </activity>
+        <activity android:name=".swipe.SwipeActivity">
         </activity>
     </application>
 

@@ -5,6 +5,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 
+import com.feicuiedu.recyclerviewdemo_0310.linear.SecondActivity;
+import com.feicuiedu.recyclerviewdemo_0310.stagger.StaggerActivity;
+import com.feicuiedu.recyclerviewdemo_0310.swipe.SwipeActivity;
+
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -17,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
         ButterKnife.bind(this);
     }
 
-    @OnClick({R.id.btnNormal,R.id.btnStagger})
+    @OnClick({R.id.btnNormal,R.id.btnStagger,R.id.btnSwipe})
     public void gotoOther(View view){
         switch (view.getId()){
             case R.id.btnNormal:
@@ -25,6 +29,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.btnStagger:
                 startActivity(new Intent(MainActivity.this,StaggerActivity.class));
+                break;
+            case R.id.btnSwipe:
+                startActivity(new Intent(MainActivity.this, SwipeActivity.class));
                 break;
         }
     }
